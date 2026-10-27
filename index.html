@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#100d1a" />
+  <meta name="description" content="Небольшая история, написанная для тебя." />
+  <title>Между строк — для тебя</title>
+  <style>
+    :root { color-scheme: dark; --ink:#f9efee; --muted:#c6b8c6; --rose:#e9a9bd; --gold:#e7c69a; --outline:rgba(255,255,255,.18); }
+    * {box-sizing:border-box}
+    html,body { margin:0; min-height:100%; background:#100d1a; }
+    body {font-family:Georgia,'Times New Roman',serif;color:var(--ink);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+    body:before {content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(ellipse at 50% 28%,#443048 0%,#251c35 40%,#100d1a 80%)}
+    body:after {content:"";pointer-events:none;position:fixed;inset:0;z-index:5;opacity:.24;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.13' filter='url(%23n)'/%3E%3C/svg%3E")}
+    #stars {position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+    .star {position:absolute;border-radius:50%;background:#fff;box-shadow:0 0 7px #fff;animation:twinkle var(--dur) ease-in-out infinite alternate;opacity:.3}
+    @keyframes twinkle {from{opacity:.1;transform:scale(.7)}to{opacity:.78;transform:scale(1.2)}}
+    .halo{position:fixed;left:50%;top:43%;width:min(90vw,570px);height:min(90vw,570px);border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(232,147,184,.13),transparent 65%);filter:blur(12px);z-index:-1;pointer-events:none}
+    main {min-height:100svh;display:flex;align-items:center;justify-content:center;padding:88px 22px 112px;position:relative}
+    .scene {width:min(100%,620px);text-align:center;animation:appear 850ms ease both}
+    @keyframes appear {from{opacity:0;transform:translateY(24px);filter:blur(5px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+    .eyebrow {font-family:system-ui,-apple-system,sans-serif;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin:0 0 25px}
+    h1,h2 {font-size:clamp(38px,8vw,68px);font-weight:400;letter-spacing:-.045em;line-height:1.08;margin:0 0 18px}
+    h1 em, h2 em {font-weight:400;color:var(--rose)}
+    .intro-copy,.ending-copy{font-size:clamp(16px,4vw,20px);line-height:1.8;color:var(--muted);max-width:450px;margin:22px auto 35px}
+    .seal {width:76px;height:76px;margin:0 auto 34px;border-radius:50%;border:1px solid rgba(231,198,154,.5);display:grid;place-items:center;color:var(--gold);font-size:30px;box-shadow:0 0 0 8px rgba(231,198,154,.04),0 0 60px rgba(244,177,195,.15)}
+    button {font:inherit;cursor:pointer;color:inherit}
+    .primary {display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;border:1px solid rgba(233,169,189,.6);background:linear-gradient(135deg,rgba(233,169,189,.2),rgba(233,169,189,.07));padding:13px 27px;border-radius:100px;font-family:system-ui,-apple-system,sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;transition:transform .2s,background .2s;touch-action:manipulation}
+    .primary:active {transform:scale(.96)} .primary:hover {background:rgba(233,169,189,.22)}
+    .poem-title{font-size:clamp(32px,7vw,54px);margin-bottom:32px}
+    .poem {overflow-wrap:anywhere;font-size:clamp(19px,4.9vw,26px);line-height:1.9;white-space:pre-line;letter-spacing:.005em;max-width:540px;margin:0 auto 36px;text-wrap:balance}
+    .poem .line{display:block;opacity:0;transform:translateY(10px);animation:lineReveal .8s forwards;animation-delay:calc(var(--i) * 420ms)}
+    @keyframes lineReveal {to{opacity:1;transform:translateY(0)}}
+    .tiny-note{font-family:system-ui,-apple-system,sans-serif;font-size:11px;letter-spacing:.11em;color:var(--muted);margin:26px 0 0}
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:calc(16px + env(safe-area-inset-top)) 20px 14px;gap:15px}
+    .brand{font-family:system-ui,-apple-system,sans-serif;font-size:11px;letter-spacing:.18em;color:var(--gold)}
+    .sound{font-family:system-ui,-apple-system,sans-serif;font-size:12px;border:1px solid var(--outline);border-radius:99px;background:rgba(17,12,29,.52);padding:10px 13px;min-height:40px}
+    .bottom{position:fixed;left:0;bottom:0;right:0;z-index:10;padding:14px 23px calc(24px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center;justify-content:center}
+    .bar{height:3px;flex:1;max-width:52px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}
+    .bar.active {background:var(--rose)}.bar.past{background:rgba(233,169,189,.54)}
+    .nav{position:absolute;bottom:calc(55px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:12px;z-index:9}
+    .nav button{min-width:44px;min-height:44px;border:1px solid var(--outline);background:rgba(17,12,29,.42);border-radius:50%;font-size:22px}
+    .nav button:disabled{opacity:.28;cursor:default}
+    .hidden{display:none!important}
+    .final-icon{font-size:45px;color:var(--rose);margin:0 auto 24px}
+    .hint{position:fixed;bottom:calc(111px + env(safe-area-inset-bottom));width:100%;text-align:center;font-family:system-ui,-apple-system,sans-serif;color:#c7bbc7;font-size:10px;letter-spacing:.1em;pointer-events:none}
+    @media (max-width:420px){.poem{font-size:clamp(18px,4.7vw,21px);line-height:1.7}.poem-title{margin-bottom:22px}.tiny-note{margin-top:14px}}
+    :focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+    @media (max-height:640px){ main{padding-top:70px;padding-bottom:100px}.seal{margin-bottom:18px}.poem{line-height:1.6;margin-bottom:23px}.poem-title{margin-bottom:18px} }
+    @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.poem .line{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+  <div id="stars" aria-hidden="true"></div><div class="halo" aria-hidden="true"></div>
+  <header class="topbar"><span class="brand">МЕЖДУ СТРОК</span><button id="musicButton" class="sound" type="button" aria-pressed="false">♫ Музыка: выкл.</button></header>
+  <main id="content" aria-live="polite"></main>
+  <div id="hint" class="hint hidden">Листай касанием или стрелками</div>
+  <div id="nav" class="nav hidden"><button id="prev" aria-label="Назад" type="button">‹</button><button id="next" aria-label="Далее" type="button">›</button></div>
+  <footer id="progress" class="bottom hidden" aria-label="Прогресс истории"></footer>
+  <script>
+    // ✦ РЕДАКТИРУЙ ЗДЕСЬ: замени заголовки, строфы и заключение на свои.
+    const STORY = {
+      introTitle: 'Одна встреча. <em>Одна история.</em>',
+      introText: 'Есть встречи, которые не заканчиваются, даже когда мы прощаемся. Это несколько мыслей, которыми я хотел поделиться с тобой.',
+      verses: [
+        {title:'Тот самый день',text:'В один из дней запомнил одну фигуру.\nОна была небольшого роста, кудрявая и стройная.\nЯ сразу заметил её красивую, искреннюю улыбку.'},
+        {title:'С того момента',text:'С того момента не могу забыть её.\nИ каждый день я думаю только о ней.\nСам того не понимаю, зачем я посвящаю столько места в своей голове ей.'},
+        {title:'Никто друг другу',text:'Ведь она и я — никто друг другу.\nНо желание заботиться и переживать за неё — как за кого-то невероятно близкого и ценного.'},
+        {title:'Почему именно ты?',text:'Я очень хотел сам понять, зачем и почему мы, люди, встречаем таких персон на нашем пути.\nС ними легко, без них тоже вроде легко, но что-то не то.'},
+        {title:'Больше, чем слово',text:'Это нельзя назвать чувством влюблённости, это нечто выше и сложнее такого термина.\nЯ бы сказал, меня устраивает жить в таких условиях.'},
+        {title:'Вопросы без ответа',text:'Но порой я думаю: зачем мне это всё?\nДля чего нам посылают такие случаи в жизни? К чему это приведёт?'}
+      ],
+      endingTitle:'А должен ли быть <em>конец?</em>',
+      endingText:'А вообще, должен ли быть у такой истории конец?',
+      signature:'Между строк ♡'
+    };
+    // ✦ Конец редактируемого текста.
+
+    const root=document.getElementById('content');
+    const bars=document.getElementById('progress');
+    const nav=document.getElementById('nav');
+    const hint=document.getElementById('hint');
+    let chapter=-1;
+    const last=STORY.verses.length;
+    const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function render(){
+      let html='';
+      if(chapter===-1){
+        html=`<section class="scene"><div class="seal" aria-hidden="true">✧</div><p class="eyebrow">Маленькое послание</p><h1>${STORY.introTitle}</h1><p class="intro-copy">${escapeHTML(STORY.introText)}</p><button id="start" class="primary" type="button">Открыть историю <span aria-hidden="true">→</span></button></section>`;
+      }else if(chapter===last){
+        html=`<section class="scene"><div class="final-icon" aria-hidden="true">♡</div><p class="eyebrow">Вместо точки — многоточие</p><h2>${STORY.endingTitle}</h2><p class="ending-copy">${escapeHTML(STORY.endingText)}</p><p class="eyebrow">${escapeHTML(STORY.signature)}</p><button id="again" class="primary" type="button">Прочитать снова ↺</button></section>`;
+      }else{
+        const entry=STORY.verses[chapter];
+        const lines=entry.text.split('\n').map((l,i)=>`<span class="line" style="--i:${i}">${escapeHTML(l)||'&nbsp;'}</span>`).join('');
+        html=`<section class="scene"><p class="eyebrow">Глава ${String(chapter+1).padStart(2,'0')} / ${String(last).padStart(2,'0')}</p><h2 class="poem-title">${escapeHTML(entry.title)}</h2><div class="poem">${lines}</div><p class="tiny-note">${chapter===last-1?'Остался один вопрос…':'Коснись стрелки, чтобы продолжить'}</p></section>`;
+      }
+      root.innerHTML=html;
+      document.getElementById('start')?.addEventListener('click',()=>go(0));
+      document.getElementById('again')?.addEventListener('click',()=>go(-1));
+      const onStory=chapter>=0;
+      nav.classList.toggle('hidden',!onStory);
+      bars.classList.toggle('hidden',!onStory);
+      hint.classList.toggle('hidden',!onStory);
+      nav.querySelector('#prev').disabled=chapter===0;
+      nav.querySelector('#next').disabled=chapter===last;
+      bars.innerHTML=Array.from({length:last+1},(_,i)=>`<span class="bar ${i===chapter?'active':i<chapter?'past':''}"></span>`).join('');
+      if(chapter===last)hint.textContent='Это послание останется с тобой';
+      else hint.textContent='Листай касанием или стрелками';
+    }
+    function go(value){chapter=Math.max(-1,Math.min(last,value));render()}
+    document.getElementById('prev').addEventListener('click',()=>go(chapter-1));
+    document.getElementById('next').addEventListener('click',()=>go(chapter+1));
+    document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&chapter>=0)go(chapter+1);if(e.key==='ArrowLeft'&&chapter>0)go(chapter-1)});
+    let touchStart=null;
+    root.addEventListener('touchstart',e=>{touchStart={x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY}}, {passive:true});
+    root.addEventListener('touchend',e=>{if(!touchStart||chapter<0)return;const dx=e.changedTouches[0].clientX-touchStart.x;const dy=e.changedTouches[0].clientY-touchStart.y;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4)go(chapter+(dx<0?1:-1));touchStart=null},{passive:true});
+    // Decorative stars with fixed seed so layout doesn't jump on each render.
+    let seed=43829;const rnd=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296);
+    const stars=document.getElementById('stars');
+    for(let i=0;i<90;i++){const s=document.createElement('i');s.className='star';const size=1+rnd()*2;s.style.cssText=`left:${rnd()*100}%;top:${rnd()*100}%;width:${size}px;height:${size}px;--dur:${2+rnd()*5}s;animation-delay:${-rnd()*6}s`;stars.appendChild(s)}
+
+    // Built-in gentle instrumental notes. No audio download or external service required.
+    // Music starts only after a user tap, as required by mobile browsers.
+    const musicButton=document.getElementById('musicButton');
+    let ctx=null,playing=false,timeout=null,noteIndex=0;
+    const tune=[0,4,7,11,9,7,4,2,0,2,5,9,7,5,4,2];
+    function playNote(){
+      if(!playing||!ctx)return;
+      const t=ctx.currentTime+0.02, semitone=tune[noteIndex%tune.length];
+      const freq=220*Math.pow(2,semitone/12);
+      const oscillator=ctx.createOscillator(),gain=ctx.createGain();
+      oscillator.type='sine';oscillator.frequency.setValueAtTime(freq,t);
+      gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.044,t+.08);gain.gain.exponentialRampToValueAtTime(.0001,t+1.35);
+      oscillator.connect(gain).connect(ctx.destination);oscillator.start(t);oscillator.stop(t+1.4);
+      noteIndex++;timeout=setTimeout(playNote,680);
+    }
+    musicButton.addEventListener('click',async()=>{
+      if(playing){playing=false;clearTimeout(timeout);if(ctx)await ctx.suspend();musicButton.textContent='♫ Музыка: выкл.';musicButton.setAttribute('aria-pressed','false');return}
+      try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();await ctx.resume();playing=true;musicButton.textContent='♫ Музыка: вкл.';musicButton.setAttribute('aria-pressed','true');playNote()}
+      catch(e){musicButton.textContent='Звук недоступен'}
+    });
+    render();
+  </script>
+</body>
+</html>
